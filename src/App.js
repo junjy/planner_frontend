@@ -4,6 +4,7 @@ import Calendar from './components/pages/Calendar'
 import EventsList from './components/calendar/EventsList'
 import Event from './components/calendar/Event'
 import NewEvent from './components/calendar/NewEvent'
+import EditEvent from './components/calendar/EditEvent'
 
 class App extends React.Component {
   render() {
@@ -14,6 +15,7 @@ class App extends React.Component {
           <Switch>
             {/* <Route path="/" component={Calendar} /> */}
             <Route path="/events/new" component={NewEvent} />
+            <Route path="/events/:id/edit" component={EditEvent} />
             <Route path="/events/:id" component={Event} />
             <Route path="/events" component={EventsList} />
           </Switch>
