@@ -43,7 +43,7 @@ class Event extends React.Component {
             <div className="page-home">
                 <div className="container">
                         <h1>My Calendar - Event Info</h1>
-                        <p>Text: {this.state.text}</p>
+                        {/* <p>Text: {this.state.text}</p> */}
                         {
                             this.state.event ? (
                                 <div className="event-info">
