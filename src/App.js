@@ -1,8 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Calendar from './components/pages/Calendar'
-import Events from './components/calendar/Events'
+import EventsList from './components/calendar/EventsList'
 import Event from './components/calendar/Event'
+import NewEvent from './components/calendar/NewEvent'
+import EditEvent from './components/calendar/EditEvent'
 
 class App extends React.Component {
   render() {
@@ -12,8 +14,10 @@ class App extends React.Component {
         <Router>
           <Switch>
             {/* <Route path="/" component={Calendar} /> */}
-            {/* <Route path="/events" component={Events} /> */}
+            <Route path="/events/new" component={NewEvent} />
+            <Route path="/events/:id/edit" component={EditEvent} />
             <Route path="/events/:id" component={Event} />
+            <Route path="/events" component={EventsList} />
           </Switch>
         </Router>
 

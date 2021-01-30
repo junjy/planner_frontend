@@ -1,5 +1,5 @@
 import React from 'react'
-import api from '../../services/api'
+import plannerAPI from '../../services/api'
 
 // import Calendar from 'tui-calendar'; /* ES6 */
 // import "tui-calendar/dist/tui-calendar.css";
@@ -21,7 +21,7 @@ class Event extends React.Component {
         const eventID = this.props.match.params.id;
         // console.log(eventID);
 
-        api.getEvent(eventID).then((response) => {
+        plannerAPI.getEvent(eventID).then((response) => {
             // console.log(response.data);
 
             this.setState({
@@ -35,15 +35,13 @@ class Event extends React.Component {
         })
     }
 
-    getEvent
-
 
     render() {
         return(
-            <div className="page-home">
+            <div className="page-event">
                 <div className="container">
                         <h1>My Calendar - Event Info</h1>
-                        <p>Text: {this.state.text}</p>
+                        {/* <p>Text: {this.state.text}</p> */}
                         {
                             this.state.event ? (
                                 <div className="event-info">
