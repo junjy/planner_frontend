@@ -1,12 +1,6 @@
 import React from 'react'
 import plannerAPI from '../../services/api'
 
-// import Calendar from 'tui-calendar'; /* ES6 */
-// import "tui-calendar/dist/tui-calendar.css";
-// // If you use the default popups, use this.
-// import 'tui-date-picker/dist/tui-date-picker.css';
-// import 'tui-time-picker/dist/tui-time-picker.css';
-
 
 class Event extends React.Component {
     constructor(props) {
@@ -25,7 +19,7 @@ class Event extends React.Component {
             // console.log(response.data);
 
             this.setState({
-                event: response.data,
+                event: response.data.event,
                 // text: "component mounted at 2pm"
             });
             // console.log(this.state.event);
@@ -34,7 +28,6 @@ class Event extends React.Component {
             console.log(err)
         })
     }
-
 
     render() {
         return(

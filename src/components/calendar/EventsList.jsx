@@ -40,6 +40,7 @@ class Events extends React.Component {
                                         <p><strong>Title: {element.title}</strong></p>
                                         <p>Start: {element.start}</p>
                                         <p>End: {element.end}</p>
+                                        <p>EventID: {element._id}</p>
                                         <br />
                                     </div>
                                 )
