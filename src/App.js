@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-// import CalMonthly from './components/pages/CalMonthly'
-import CalendarTest from './components/pages/CalendarTest'
+// import TUICalendarTest from './components/pages/TUICalendarTest'
+import FullCalendarTest from './components/pages/FullCalendarTest'
 
 import EventsList from './components/calendar/EventsList'
 import Event from './components/calendar/Event'
@@ -19,8 +19,8 @@ class App extends React.Component {
             <Route path="/events/:id/edit" component={EditEvent} />
             <Route path="/events/:id" component={Event} />
             <Route path="/events" component={EventsList} />
-            {/* <Route path="/calendar/monthly" component={CalMonthly} />  */}
-            <Route exact path="/calendar" component={CalendarTest} />
+            {/* <Route exact path="/calendar" component={TUICalendarTest} /> */}
+            <Route exact path="/calendar" component={FullCalendarTest} />
           </Switch>
         </Router>
       </div>
