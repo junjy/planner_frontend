@@ -15,10 +15,10 @@ class EditEvent extends React.Component {
         const eventID = this.props.match.params.id;
 
         plannerAPI.getEvent(eventID).then((response) => {
-            // console.log(response.data);
+            console.log(response.data);
 
             this.setState({
-                event: response.data,
+                event: response.data.event,
                 // text: "edit event component mounted at 4.30pm"
             });
             // console.log(this.state.event);
