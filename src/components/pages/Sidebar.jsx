@@ -1,5 +1,6 @@
 import React from 'react'
 import { formatDate } from '@fullcalendar/react'
+import plannerAPI from '../../services/api'
 import '../../css/main.css'
 
 class Sidebar extends React.Component {
@@ -7,12 +8,25 @@ class Sidebar extends React.Component {
         super(props);
         this.state = {
             weekendsVisible: true,
-            currentEvents: []
+            currentEvents: [],
+            list: [],
         };
     }
 
     componentDidMount() {
 
+        plannerAPI.listEvents().then((response) => {
+            // console.log(response.data.events);
+
+            this.setState({
+                list: response.data.events,
+                // text: "calendar component mounted at 3pm"
+            });
+
+            
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     handleWeekendsToggle = () => {
@@ -22,6 +36,8 @@ class Sidebar extends React.Component {
     }
 
     handleEvents = (events) => {
+        events = this.state.list;
+
         this.setState({
           currentEvents: events
         })
