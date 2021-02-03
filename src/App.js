@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 // import TUICalendarTest from './components/pages/TUICalendarTest'
 import FullCalendarTest from './components/pages/FullCalendarTest'
+import FullCalTestEvents from './components/pages/FullCalTestEvents'
 
 import EventsList from './components/calendar/EventsList'
 import Event from './components/calendar/Event'
@@ -21,6 +22,7 @@ class App extends React.Component {
             <Route path="/events" component={EventsList} />
             {/* <Route exact path="/calendar" component={TUICalendarTest} /> */}
             <Route exact path="/calendar" component={FullCalendarTest} />
+            <Route exact path="/calevents" component={FullCalTestEvents} />
           </Switch>
         </Router>
       </div>

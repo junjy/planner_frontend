@@ -6,8 +6,10 @@ import listPlugin from '@fullcalendar/list'; // offers Lists views
 import timeGridPlugin from '@fullcalendar/timegrid';
 import momentPlugin from '@fullcalendar/moment'; // req for Date formatting strings
 import { INITIAL_EVENTS, createEventId } from './event-utils'
+import '../../css/main.css'
 
 import Sidebar from './Sidebar'
+import plannerAPI from '../../services/api'
 
 
 // today's date
@@ -19,35 +21,62 @@ let str = formatDate(new Date(), {
 
   console.log(str);
 
-class FullCalendarTest extends React.Component {
+//   let eventGuid = 0
+//   let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+
+//     const events = [
+//         {
+//             id: createEventId(),
+//             title: 'All-day Event A',
+//             start: todayStr,
+//             end: todayStr + 'T3:00:00'
+//         },
+//     ]
+
+//     export function createEventId() {
+//         return String(eventGuid++)
+//     }
+class FullCalTestEvents extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             weekendsVisible: true,
             currentEvents: [],
-            renderSidebar: <Sidebar />
+            renderSidebar: <Sidebar />,
+            list: [],
+            // text: null,
         };
     }
 
     componentDidMount() {
 
-        // this.setState({
-        //     events: [
-        //         { title: 'event 1', date: '2021-02-02' },
-        //         { title: 'event 2', date: '2021-02-04' }
-        //     ]
-        // })
+        plannerAPI.listEvents().then((response) => {
+            // console.log(response.data.events);
+
+            this.setState({
+                list: response.data.events,
+                // text: "calendar component mounted at 3pm"
+            });
+
+            
+        }).catch(err => {
+            console.log(err)
+        })
 
     }
 
     //=== FUNCTIONS ===//
-
-    // handleWeekendsToggle = () => {
-    //     this.setState({
-    //       weekendsVisible: !this.state.weekendsVisible
-    //     })
-    // }
+    renderEventContent = (eventInfo) => {
+        return (
+          <>
+            <b>{eventInfo.timeText}</b>
+            <i>{eventInfo.event.title}</i>
+          </>
+        )
+    }
     
+    //=== HANDLERS === //
+
     handleDateSelect = (selectInfo) => {
         let title = prompt('Please enter a new title for your event')
         let calendarApi = selectInfo.view.calendar
@@ -77,31 +106,14 @@ class FullCalendarTest extends React.Component {
           currentEvents: events
         })
     }
-    
-    renderEventContent = (eventInfo) => {
-      return (
-        <>
-          <b>{eventInfo.timeText}</b>
-          <i>{eventInfo.event.title}</i>
-        </>
-      )
-    }
-    // function renderSidebarEvent(event) {
-    //   return (
-    //     <div>
-    //         <li key={event.id}>
-    //         <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-    //         <i>{event.title}</i>
-    //         </li>
-    //     </div>
-    //   )
-    // }
-    //=== HANDLERS === //
+
     handleDateClick = (arg) => { // bind with an arrow function
         alert(arg.dateStr);
     }
 
+
     render() {
+
         return(
             <div className="demo-app">
                 {this.state.renderSidebar}
@@ -114,8 +126,8 @@ class FullCalendarTest extends React.Component {
                         dateClick={this.handleDateClick}
                         initialView="dayGridMonth"
                         headerToolbar={{
-                            left: 'title',
-                            center: 'today prev,next',
+                            left: 'today prev,next',
+                            center: 'title',
                             right: 'dayGridMonth,timeGridWeek,timeGridDay',
                         }}
                         footerToolbar={{
@@ -164,11 +176,12 @@ class FullCalendarTest extends React.Component {
                             }
 
                         }}
-                        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+                        // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
                         // events={[
                         //     { title: 'event 1', date: '2021-02-02' },
                         //     { title: 'event 2', date: '2021-02-04' }
                         // ]}
+                        events={this.state.list}
                         select={this.handleDateSelect}
                         eventContent={this.renderEventContent} // custom render function
                         eventClick={this.handleEventClick}
@@ -179,6 +192,8 @@ class FullCalendarTest extends React.Component {
                         eventRemove={function(){}}
                         */
                     />
+
+                
                 </div>
 
             </div>
@@ -188,4 +203,4 @@ class FullCalendarTest extends React.Component {
     
 }
 
-export default FullCalendarTest;
+export default FullCalTestEvents;
