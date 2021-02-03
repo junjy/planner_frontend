@@ -6,8 +6,9 @@ import listPlugin from '@fullcalendar/list'; // offers Lists views
 import timeGridPlugin from '@fullcalendar/timegrid';
 import momentPlugin from '@fullcalendar/moment'; // req for Date formatting strings
 import { INITIAL_EVENTS, createEventId } from './event-utils'
+import '../../css/app.css'
 
-import Sidebar from './Sidebar'
+import Sidebar from '../pages/Sidebar'
 
 
 // today's date
@@ -49,6 +50,7 @@ class FullCalendarTest extends React.Component {
     // }
     
     handleDateSelect = (selectInfo) => {
+        // console.log(selectInfo);
         let title = prompt('Please enter a new title for your event')
         let calendarApi = selectInfo.view.calendar
     
@@ -67,9 +69,10 @@ class FullCalendarTest extends React.Component {
     
     //*** check confirm syntax error */
     handleEventClick = (clickInfo) => {
-        // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+        // console.log(clickInfo);
+        if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
           clickInfo.event.remove()
-        // }
+        }
     }
     
     handleEvents = (events) => {
@@ -78,13 +81,15 @@ class FullCalendarTest extends React.Component {
         })
     }
     
+    // truncated event display on calendar
     renderEventContent = (eventInfo) => {
-      return (
-        <>
-          <b>{eventInfo.timeText}</b>
-          <i>{eventInfo.event.title}</i>
-        </>
-      )
+        // console.log(eventInfo);
+        return (
+            <>
+            <b>{eventInfo.timeText}</b>
+            <i>{eventInfo.event.title}</i>
+            </>
+        )
     }
     // function renderSidebarEvent(event) {
     //   return (
@@ -106,7 +111,7 @@ class FullCalendarTest extends React.Component {
             <div className="demo-app">
                 {this.state.renderSidebar}
                 <div className='demo-app-main'>
-                    <h1>My Calendar</h1>
+                    <h1>My Calendar (TEST)</h1>
                     <p></p>
                     <FullCalendar
                         plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin, momentPlugin ]}
@@ -125,7 +130,7 @@ class FullCalendarTest extends React.Component {
                         }}
                         navLinks={true}
                         editable={true}
-                        selectable={false}
+                        selectable={true} // Allows a user to highlight multiple days or timeslots by clicking and dragging.
                         selectMirror={false}
                         dayMaxEvents={true}
                         weekNumbers={true} // display in Month/DayGrid & top-left corner of TimeGrid views
@@ -178,6 +183,9 @@ class FullCalendarTest extends React.Component {
                         eventChange={function(){}}
                         eventRemove={function(){}}
                         */
+                        eventRemove={function(){
+                            console.log('event removed')
+                        }}
                     />
                 </div>
 

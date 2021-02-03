@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 // Test only
 // import TUICalendarTest from './components/pages/TUICalendarTest'
-import FullCalendarTest from './components/pages/FullCalendarTest'
+import FullCalendarTest from './components/test/FullCalendarTest'
+import EventsList2 from './components/test/EventsList2'
 
 // Actual 
 import EventsList from './components/calendar/EventsList'
@@ -22,8 +23,11 @@ class App extends React.Component {
             <Route path="/events/:id/edit" component={EditEvent} />
             <Route path="/events/:id" component={Event} />
             <Route path="/events" component={EventsList} />
+            <Route path="/events2" component={EventsList2} />
+            
+            {/*===== Test Pages =====*/}
             {/* <Route exact path="/calendar" component={TUICalendarTest} /> */}
-            <Route exact path="/calendar" component={FullCalendarTest} />
+            <Route exact path="/calendartest" component={FullCalendarTest} />
           </Switch>
         </Router>
       </div>

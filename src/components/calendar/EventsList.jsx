@@ -5,10 +5,10 @@ import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClic
 import listPlugin from '@fullcalendar/list'; // offers Lists views
 import timeGridPlugin from '@fullcalendar/timegrid';
 import momentPlugin from '@fullcalendar/moment'; // req for Date formatting strings
-import { INITIAL_EVENTS, createEventId } from './../pages/event-utils'
+import { INITIAL_EVENTS, createEventId } from '../test/event-utils'
 import '../../css/app.css'
 
-import Sidebar from './../pages/Sidebar'
+import Sidebar from '../pages/Sidebar'
 import plannerAPI from '../../services/api'
 
 class EventsList extends React.Component {
@@ -40,17 +40,56 @@ class EventsList extends React.Component {
 
     }
 
-    //=== FUNCTIONS ===//
+    //=== GENERAL FUNCTIONS ====
+
+
+    //=== GENERAL HANDLERS TO BACKEND DB ====
+
+    addCalEvent = (addInfo) => {
+        console.log(addInfo);
+
+    }
+
+
+    updateCalEvent = (changeInfo) => {
+        console.log(changeInfo);
+
+    }
+
+    removeCalEvent = (removeInfo) => {
+        // console.log(removeInfo.event.extendedProps._id);
+        let id = removeInfo.event.extendedProps._id;
+        console.log(id);
+
+        // to update
+        plannerAPI
+        .deleteEvent(id)
+        .then((response) => {
+          if (!response.data) {
+            console.log("error in delete submission");
+            return;
+          }
+          console.log(response);
+          console.log("existing event deleted");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    }
+
+
+    //=== CALENDAR FUNCTIONS ===//
     renderEventContent = (eventInfo) => {
         return (
-          <>
+            <>
             <b>{eventInfo.timeText}</b>
             <i>{eventInfo.event.title}</i>
-          </>
+            </>
         )
     }
     
-    //=== HANDLERS === //
+    //=== CALENDAR HANDLERS === //
 
     handleDateSelect = (selectInfo) => {
         let title = prompt('Please enter a new title for your event')
@@ -69,12 +108,22 @@ class EventsList extends React.Component {
         }
     }
     
-    //*** check confirm syntax error */
+    // *** check confirm syntax error */
     handleEventClick = (clickInfo) => {
-        // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+
+        if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
           clickInfo.event.remove()
-        // }
+        }
     }
+
+    // handleEventClick = (eventInfo) => {
+    //     return (
+    //         <>
+    //         <b>{eventInfo.timeText}</b>
+    //         <i>{eventInfo.event.title}</i>
+    //         </>
+    //     )
+    // }
     
     handleEvents = (events) => {
         this.setState({
@@ -112,11 +161,12 @@ class EventsList extends React.Component {
                         }}
                         navLinks={true}
                         editable={true}
-                        selectable={false}
+                        selectable={true} // Allows a user to highlight multiple days or timeslots by clicking and dragging.
                         selectMirror={false}
                         dayMaxEvents={true}
                         weekNumbers={true} // display in Month/DayGrid & top-left corner of TimeGrid views
                         weekends={this.state.weekendsVisible}
+                        events={this.state.list}
                         businessHours={[ // specify an array instead
                             {
                             daysOfWeek: [ 1, 2, 3, 4 ], // Mon - Thu
@@ -156,7 +206,6 @@ class EventsList extends React.Component {
                         //     { title: 'event 1', date: '2021-02-02' },
                         //     { title: 'event 2', date: '2021-02-04' }
                         // ]}
-                        events={this.state.list}
                         select={this.handleDateSelect}
                         eventContent={this.renderEventContent} // custom render function
                         eventClick={this.handleEventClick}
@@ -164,8 +213,13 @@ class EventsList extends React.Component {
                         /* you can update a remote database when these fire:
                         eventAdd={function(){}}
                         eventChange={function(){}}
-                        eventRemove={function(){}}
-                        */
+                        eventRemove={function(){}} */
+                        // eventAdd={function(){}}
+                        /***  Update in mongoDB ***/
+                        eventAdd={this.addCalEvent}
+                        eventChange={this.updateCalEvent}
+                        eventRemove={this.removeCalEvent}
+
                     />
 
                 

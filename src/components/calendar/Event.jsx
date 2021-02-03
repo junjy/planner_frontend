@@ -1,12 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import plannerAPI from '../../services/api'
-
 
 class Event extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            event: null,
+            event: {},
             // text: null,
         };
     }
@@ -29,6 +29,24 @@ class Event extends React.Component {
         })
     }
 
+    handleDelete(e, id) {
+
+        plannerAPI
+        .deleteEvent(id)
+        .then((response) => {
+          if (!response.data) {
+            console.log("error in delete submission");
+            return;
+          }
+          console.log(response);
+          console.log("existing event deleted");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    }
+
     render() {
         return(
             <div className="page-event">
@@ -39,10 +57,21 @@ class Event extends React.Component {
                             this.state.event ? (
                                 <div className="event-info">
                                     <p>Title: {this.state.event.title}</p>
+                                    <p>Start: {this.state.event.start}</p>
+                                    <p>End: {this.state.event.end}</p>
                                     <p>Category: {this.state.event.category}</p>
-                                    <p>Due Date Class: {this.state.event.dueDateClass}</p>
-                                    <p>CalendarId: {this.state.event.calendarId}</p>
-                                    <p>Event ID: {this.state.event.id}</p>
+                                    {/* <p>Due Date Class: {this.state.event.dueDateClass}</p>
+                                    <p>CalendarId: {this.state.event.calendarId}</p> */}
+                                    <p>Event ID: {this.state.event._id}</p>
+
+
+                                    <Link to={{pathname: `/events/${this.state.event._id}/edit`,}} className="" >
+                                        Edit
+                                    </Link>{" "}
+                                    <button type="submit" onClick={(e) => this.handleDelete(e, this.state.event._id)} className="">
+                                        Delete
+                                    </button>
+
                                 </div>
 
                             ) : ''
