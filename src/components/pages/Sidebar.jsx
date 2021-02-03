@@ -1,5 +1,6 @@
 import React from 'react'
 import { formatDate } from '@fullcalendar/react'
+import '../../css/main.css'
 
 class Sidebar extends React.Component {
     constructor(props) {
@@ -37,32 +38,30 @@ class Sidebar extends React.Component {
 
     render() {
         return(
-            <div className="container">
-                <div className='demo-app-sidebar'>
-                    <div className='demo-app-sidebar-section'>
-                        <h2>Instructions</h2>
-                        <ul>
-                            <li>Select dates and you will be prompted to create a new event</li>
-                            <li>Drag, drop, and resize events</li>
-                            <li>Click an event to delete it</li>
-                        </ul>
-                    </div>
-                    <div className='demo-app-sidebar-section'>
-                        <label>
-                            <input
-                            type='checkbox'
-                            checked={this.state.weekendsVisible}
-                            onChange={this.handleWeekendsToggle}
-                            ></input>
-                            toggle weekends
-                        </label>
-                    </div>
-                    <div className='demo-app-sidebar-section'>
-                        <h2>All Events ({this.state.currentEvents.length})</h2>
-                        <ul>
-                            {this.state.currentEvents.map(this.renderSidebarEvent)}
-                        </ul>
-                    </div>
+            <div className='demo-app-sidebar'>
+                <div className='demo-app-sidebar-section'>
+                    <h2>Instructions</h2>
+                    <ul>
+                        <li>Select dates and you will be prompted to create a new event</li>
+                        <li>Drag, drop, and resize events</li>
+                        <li>Click an event to delete it</li>
+                    </ul>
+                </div>
+                <div className='demo-app-sidebar-section'>
+                    <label>
+                        <input
+                        type='checkbox'
+                        checked={this.state.weekendsVisible}
+                        onChange={this.handleWeekendsToggle}
+                        ></input>
+                        toggle weekends
+                    </label>
+                </div>
+                <div className='demo-app-sidebar-section'>
+                    <h2>All Events ({this.state.currentEvents.length})</h2>
+                    <ul>
+                        {this.state.currentEvents.map(this.renderSidebarEvent)}
+                    </ul>
                 </div>
             </div>
         )

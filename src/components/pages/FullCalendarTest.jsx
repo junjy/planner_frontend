@@ -86,7 +86,6 @@ class FullCalendarTest extends React.Component {
         </>
       )
     }
-
     // function renderSidebarEvent(event) {
     //   return (
     //     <div>
@@ -97,7 +96,6 @@ class FullCalendarTest extends React.Component {
     //     </div>
     //   )
     // }
-
     //=== HANDLERS === //
     handleDateClick = (arg) => { // bind with an arrow function
         alert(arg.dateStr);
@@ -105,80 +103,84 @@ class FullCalendarTest extends React.Component {
 
     render() {
         return(
-            <div className="container">
-                <h1>My Calendar</h1>
-                {/* {this.state.renderSidebar} */}
-                <FullCalendar
-                    plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin, momentPlugin ]}
-                    timeZone='UTC'
-                    dateClick={this.handleDateClick}
-                    initialView="dayGridMonth"
-                    headerToolbar={{
-                        left: 'title',
-                        center: 'today prev,next',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    }}
-                    footerToolbar={{
-                        left: 'prevYear',
-                        center: '',
-                        right: 'nextYear',
-                    }}
-                    navLinks={true}
-                    editable={true}
-                    selectable={false}
-                    selectMirror={false}
-                    dayMaxEvents={true}
-                    weekNumbers={true} // display in Month/DayGrid & top-left corner of TimeGrid views
-                    weekends={this.state.weekendsVisible}
-                    businessHours={[ // specify an array instead
-                        {
-                          daysOfWeek: [ 1, 2, 3, 4 ], // Mon - Thu
-                          startTime: '09:00', 
-                          endTime: '18:00' 
-                        },
-                        {
-                          daysOfWeek: [ 4, 5 ], // Fri
-                          startTime: '09:00', 
-                          endTime: '17:00' 
-                        }
-                    ]}
-                    views={{
-                        dayGridMonth: { // name of view
-                            weekday: 'long',
-                            titleFormat: { 
-                                year: 'numeric', 
-                                month: 'long',
-                                // day: 'numeric' 
+            <div className="demo-app">
+                {this.state.renderSidebar}
+                <div className='demo-app-main'>
+                    <h1>My Calendar</h1>
+                    <p></p>
+                    <FullCalendar
+                        plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin, momentPlugin ]}
+                        timeZone='UTC'
+                        dateClick={this.handleDateClick}
+                        initialView="dayGridMonth"
+                        headerToolbar={{
+                            left: 'title',
+                            center: 'today prev,next',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                        }}
+                        footerToolbar={{
+                            left: 'prevYear',
+                            center: '',
+                            right: 'nextYear',
+                        }}
+                        navLinks={true}
+                        editable={true}
+                        selectable={false}
+                        selectMirror={false}
+                        dayMaxEvents={true}
+                        weekNumbers={true} // display in Month/DayGrid & top-left corner of TimeGrid views
+                        weekends={this.state.weekendsVisible}
+                        businessHours={[ // specify an array instead
+                            {
+                            daysOfWeek: [ 1, 2, 3, 4 ], // Mon - Thu
+                            startTime: '09:00', 
+                            endTime: '18:00' 
                             },
-                          // other view-specific options here
-                        },
-                        timeGrid: {
-                            // options apply to timeGridWeek and timeGridDay views
-                            nowIndicator: true,
-                        },
-                        week: {
-                            // options apply to dayGridWeek and timeGridWeek views
-                        },
-                        day: {
-                            // options apply to dayGridDay and timeGridDay views
-                        }
+                            {
+                            daysOfWeek: [ 4, 5 ], // Fri
+                            startTime: '09:00', 
+                            endTime: '17:00' 
+                            }
+                        ]}
+                        views={{
+                            dayGridMonth: { // name of view
+                                weekday: 'long',
+                                titleFormat: { 
+                                    year: 'numeric', 
+                                    month: 'long',
+                                    // day: 'numeric' 
+                                },
+                            // other view-specific options here
+                            },
+                            timeGrid: {
+                                // options apply to timeGridWeek and timeGridDay views
+                                nowIndicator: true,
+                            },
+                            week: {
+                                // options apply to dayGridWeek and timeGridWeek views
+                            },
+                            day: {
+                                // options apply to dayGridDay and timeGridDay views
+                            }
 
-                    }}
-                    initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-                    // events={[
-                    //     { title: 'event 1', date: '2021-02-02' },
-                    //     { title: 'event 2', date: '2021-02-04' }
-                    // ]}
-                    select={this.handleDateSelect}
-                    eventContent={this.renderEventContent} // custom render function
-                    eventClick={this.handleEventClick}
-                    eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
-                    /* you can update a remote database when these fire:
-                    eventAdd={function(){}}
-                    eventChange={function(){}}
-                    eventRemove={function(){}}
-                    */
-                />
+                        }}
+                        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+                        // events={[
+                        //     { title: 'event 1', date: '2021-02-02' },
+                        //     { title: 'event 2', date: '2021-02-04' }
+                        // ]}
+                        select={this.handleDateSelect}
+                        eventContent={this.renderEventContent} // custom render function
+                        eventClick={this.handleEventClick}
+                        eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+                        /* you can update a remote database when these fire:
+                        eventAdd={function(){}}
+                        eventChange={function(){}}
+                        eventRemove={function(){}}
+                        */
+                    />
+                </div>
+
             </div>
         )
     }

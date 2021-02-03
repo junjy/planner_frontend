@@ -1,8 +1,11 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
+// Test only
 // import TUICalendarTest from './components/pages/TUICalendarTest'
 import FullCalendarTest from './components/pages/FullCalendarTest'
 
+// Actual 
 import EventsList from './components/calendar/EventsList'
 import Event from './components/calendar/Event'
 import NewEvent from './components/calendar/NewEvent'
