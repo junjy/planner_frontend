@@ -11,12 +11,22 @@ class NewEvent extends React.Component {
             event: {
                 title: '',
                 category: '',
-                start: '',
-                end: '',
+                start: new Date().setMinutes(0),
+                end: new Date().setMinutes(0),
             },
+            // startTemp: '',
+            // endTemp: '',
             formMsg: [],
             // text: "create new event form loaded",
         };
+    }
+
+    convertDateTime(input) {
+        // console.log(input);
+        let temp = moment(input).toISOString();
+        // console.log(temp);
+        return temp;
+
     }
     
     handleInputChange(e) {
@@ -28,29 +38,47 @@ class NewEvent extends React.Component {
     // to combine with end date later
     handleStartInputChange(e) {
         console.log(e);
+        // let temp = this.convertDateTime(e);
         this.setState({
-            event: {...this.state.event, start: e} //... copies current state of events
+            event: {...this.state.event, start: this.convertDateTime(e)} //... copies current state of events
         })
+        // this.setState({
+        //     event: {...this.state.event, start: e} //... copies current state of events
+        // })
     }
-
 
     handleEndInputChange(e) {
         console.log(e);
+        // let temp = this.convertDateTime(e);
         this.setState({
-            event: {...this.state.event, end: e} 
+            event: {...this.state.event, end: this.convertDateTime(e)} 
         })
+        // this.setState({
+        //     event: {...this.state.event, end: e} 
+        // })
     }
 
+    // invalid date & can't select timepicker. To check
     handleFormSubmit(e) {
         e.preventDefault();
 
+        // // convert
+        // let startTemp = this.convertDateTime(this.state.event.start);
+        // let endTemp = this.convertDateTime(this.state.event.end);       
+
         // clear form messages
         this.setState({
-            formMsg: []
+            formMsg: [],
+            // event: {
+            //     title: this.state.event.title,
+            //     category: this.state.event.category,
+            //     start: this.convertDateTime(this.state.event.start),
+            //     end: this.convertDateTime(this.state.event.end),
+            // }
         })
 
+        console.log('frontend formData');
         const formData = this.state.event;
-        console.log('frontend formData')
         console.log(formData);
 
         // validate form
@@ -101,12 +129,11 @@ class NewEvent extends React.Component {
         if (err.length === 0) {
             return true
         }
-
         this.setState({
             formMsg: err
         })
 
-        return false
+        return false;
     }
 
     render() {
@@ -153,8 +180,13 @@ class NewEvent extends React.Component {
                                 Start Date/Time:
                             </label>
                             <Datetime 
+                                // initialViewDate
                                 onChange={(e) => {this.handleStartInputChange(e)}}
-                                value={this.state.event.start}
+                                // value={this.state.event.start}
+                                value={moment(this.state.event.start).format("DD-MMM-YYYY hh:mm A")}
+                                dateFormat="DD-MMM-YYYY"
+                                timeFormat="hh:mm A"
+                                timeConstraints={{ minutes: { step: 15 } }}
                             />
                         </div>
                         {/* //=== End Date/Time Picker ==== // */}
@@ -163,40 +195,16 @@ class NewEvent extends React.Component {
                                 End Date/Time:
                             </label>
                             <Datetime 
+                                // initialViewDate
                                 onChange={(e) => {this.handleEndInputChange(e)}}
-                                value={this.state.event.end}
+                                // value={this.state.event.end}
+                                value={moment(this.state.event.end).format("DD-MMM-YYYY hh:mm A")}
+                                dateFormat="DD-MMM-YYYY"
+                                timeFormat="hh:mm A"
+                                timeConstraints={{ minutes: { step: 15 } }}
                             />
                         </div>
-                        {/* //=== Start Date ==== // */}
-                        {/* Add start time later */}
-                        {/* <div className="">
-                            <label htmlFor="start" className="">
-                                Start Date:
-                            </label>
-                            <input type="date" id="start" name="start" className="" min={moment().format("YYYY-MM-DD")} />
-                        </div> */}
-                        {/* //=== Start Time ==== // */}
-                        {/* <div className="">
-                            <label htmlFor="time-start" className="">
-                                Start Time:
-                            </label>
-                            <input type="time" id="time-start" name="time-start" className="" min={moment().format("hh:mm")} />
-                        </div> */}
-                        {/* //=== End Date ==== // */}
-                        {/* Add end time later */}
-                        {/* <div className="">
-                            <label htmlFor="end" className="">
-                                End Date:
-                            </label>
-                            <input type="date" id="end" name="end" className="" min={moment().format("YYYY-MM-DD")} />
-                        </div> */}
-                        {/* //=== End Time ==== // */}
-                        {/* <div className="">
-                            <label htmlFor="time-end" className="">
-                                End Time:
-                            </label>
-                            <input type="time" id="time-end" name="time-end" className="" min={moment().format("hh:mm")} />
-                        </div> */}
+ 
                         <br />
                         <button type="submit" className="">
                             Submit

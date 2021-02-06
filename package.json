@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
+    "@fullcalendar/bootstrap": "^5.5.0",
+    "@fullcalendar/core": "^5.5.1",
     "@fullcalendar/daygrid": "^5.5.0",
     "@fullcalendar/interaction": "^5.5.0",
     "@fullcalendar/list": "^5.5.0",
@@ -13,6 +16,8 @@
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
     "@toast-ui/react-calendar": "^1.0.5",
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.5.1",
     "moment": "^2.29.1",
     "qs": "^6.9.6",
     "react": "^17.0.1",
@@ -21,7 +26,6 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "tui-calendar": "^1.13.0",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

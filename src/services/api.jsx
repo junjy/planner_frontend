@@ -7,10 +7,10 @@ const baseURL = 'http://localhost:5000/api/v1'
 //     ? "http://localhost:3000/api/v1"
 //     : "http://localhost:3000/api/v1";
 
-const axiosInstance = axios.create({
-    baseURL: baseURL,
-    timeout: 5000,
-});
+// const axiosInstance = axios.create({
+//     baseURL: baseURL,
+//     timeout: 5000,
+// });
 
 const plannerAPI = {
 
