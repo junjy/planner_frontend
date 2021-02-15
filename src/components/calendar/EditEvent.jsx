@@ -14,7 +14,7 @@ class EditEvent extends React.Component {
             // startTime: '',
             // text: null,
         };
-    }ç
+    }
 
     componentDidMount() {
         const eventID = this.props.match.params.id;
@@ -33,6 +33,12 @@ class EditEvent extends React.Component {
         })
     }
 
+    convertDateTime(input) {
+        let temp = moment(input).toISOString();
+        // console.log(temp);
+        return temp;
+    }
+
     handleInputChange(e) {
         const { event } = this.state; //destructure
         event[e.target.name] = e.target.value;
@@ -43,15 +49,14 @@ class EditEvent extends React.Component {
     handleStartInputChange(e) {
         console.log(e);
         this.setState({
-            event: {...this.state.event, start: e} //... copies current state of events
+            event: {...this.state.event, start: this.convertDateTime(e)} //... copies current state of events
         })
     }
-
 
     handleEndInputChange(e) {
         console.log(e);
         this.setState({
-            event: {...this.state.event, end: e} 
+            event: {...this.state.event, end: this.convertDateTime(e)} 
         })
     }
 
@@ -84,11 +89,8 @@ class EditEvent extends React.Component {
         // console.log(itemID);
 
         const formData = this.state.event;
+        console.log('frontend formData:')
         console.log(formData);
-        // let startDateTime = moment(this.state.startDate + this.state.startTime, 'YYYY-MM-DDLT');
-        // let start = startDateTime.format('YYYY-MM-DDTHH:mm:s');
-        // console.log(startDateTime);
-        // console.log(start);
     
         const formValid = this.validateFormInputs();
     
@@ -185,7 +187,10 @@ class EditEvent extends React.Component {
                                     </label>
                                     <Datetime 
                                         onChange={(e) => {this.handleStartInputChange(e)}}
-                                        value={this.state.event.start}
+                                        // value={this.state.event.start}
+                                        value={moment(this.state.event.start).format("DD-MMM-YYYY hh:mm A")}
+                                        dateFormat="DD-MMM-YYYY"
+                                        timeFormat="hh:mm A"
                                     />
                                 </div>
                                 {/* //=== End Date/Time Picker ==== // */}
@@ -195,44 +200,13 @@ class EditEvent extends React.Component {
                                     </label>
                                     <Datetime 
                                         onChange={(e) => {this.handleEndInputChange(e)}}
-                                        value={this.state.event.end}
+                                        // value={this.state.event.end}
+                                        value={moment(this.state.event.end).format("DD-MMM-YYYY hh:mm A")}
+                                        dateFormat="DD-MMM-YYYY"
+                                        timeFormat="hh:mm A"
                                     />
                                 </div>
-                                {/* <div className="">
-                                    <label htmlFor="start" className="">
-                                        Start Date/Time:
-                                    </label>
-                                    <input type="date" className="" id="start" name="start-date" value={this.state.startDate} onChange={(e) => {this.handleInputChange(e);}} min={moment().format("YYYY-MM-DD")} /> 
-                                </div> */}
-                                {/* //=== Start Date ==== // */}
-                                {/* <div className="">
-                                    <label htmlFor="start-date" className="">
-                                        Start Date:
-                                    </label>
-                                    <input type="date" className="" id="start-date" name="start-date" value={this.state.startDate} onChange={(e) => {this.handleInputChange(e);}} min={moment().format("YYYY-MM-DD")} />
-                                </div> */}
-                                {/* //=== Start Time ==== // */}
-                                {/* <div className="">
-                                    <label htmlFor="start-time" className="">
-                                        Start Time:
-                                    </label>
-                                    <input type="time" className="" id="start-time" name="start-time" value={this.state.startTime} onChange={(e) => {this.handleInputChange(e);}}  min={moment().format("hh:mm")} />
-                                </div> */}
-                                {/* //=== End Date ==== // */}
-                                {/* Check how to display end date */}
-                                {/* <div className="">
-                                    <label htmlFor="end" className="">
-                                        End Date:
-                                    </label>
-                                    <input type="date" className="" id="end" name="end"  value={this.state.event.end} onChange={(e) => {this.handleInputChange(e);}} min={moment().format("YYYY-MM-DD")} />
-                                </div> */}
-                                {/* //=== End Time ==== // */}
-                                {/* <div className="">
-                                    <label htmlFor="time-end" className="">
-                                        End Time:
-                                    </label>
-                                    <input type="time" className="" id="time-end" name="time-end" min={moment().format("hh:mm")} />
-                                </div> */}
+  
                                 <br />
                                 <button type="submit" className="">
                                     Submit
