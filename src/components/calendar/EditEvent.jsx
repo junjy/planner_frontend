@@ -130,7 +130,9 @@ class EditEvent extends React.Component {
         if (this.state.event.end === "") {
           errMsg.push("End is required");
         }
-
+        if (this.state.event.end < this.state.event.start) {
+            errMsg.push("End date should be later than start date");
+        }
         if (errMsg.length === 0) {
           return true;
         }
@@ -191,6 +193,7 @@ class EditEvent extends React.Component {
                                         value={moment(this.state.event.start).format("DD-MMM-YYYY hh:mm A")}
                                         dateFormat="DD-MMM-YYYY"
                                         timeFormat="hh:mm A"
+                                        timeConstraints={{ minutes: { step: 15 } }}
                                     />
                                 </div>
                                 {/* //=== End Date/Time Picker ==== // */}
@@ -204,6 +207,7 @@ class EditEvent extends React.Component {
                                         value={moment(this.state.event.end).format("DD-MMM-YYYY hh:mm A")}
                                         dateFormat="DD-MMM-YYYY"
                                         timeFormat="hh:mm A"
+                                        timeConstraints={{ minutes: { step: 15 } }}
                                     />
                                 </div>
   

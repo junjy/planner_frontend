@@ -66,6 +66,13 @@ class NewEvent extends React.Component {
         // let startTemp = this.convertDateTime(this.state.event.start);
         // let endTemp = this.convertDateTime(this.state.event.end);       
 
+        console.log(this.state.event.end);
+        console.log(this.state.event.start);        
+        if (this.state.event.end < this.state.event.start) {
+            console.log("Error: end date is earlier than start");
+        } else {
+            console.log("no issue");
+        }
         // clear form messages
         this.setState({
             formMsg: [],
@@ -124,6 +131,9 @@ class NewEvent extends React.Component {
         }
         if (this.state.end === "") {
             err.push('End must not be empty')
+        }
+        if (this.state.event.end < this.state.event.start) {
+            err.push("End date should be later than start date");
         }
 
         if (err.length === 0) {

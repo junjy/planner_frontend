@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 import plannerAPI from '../../services/api'
 
 class Event extends React.Component {
@@ -57,8 +58,8 @@ class Event extends React.Component {
                             this.state.event ? (
                                 <div className="event-info">
                                     <p>Title: {this.state.event.title}</p>
-                                    <p>Start: {this.state.event.start}</p>
-                                    <p>End: {this.state.event.end}</p>
+                                    <p>Start: {moment(this.state.event.start).format("DD-MMM-YYYY hh:mm A")}</p>
+                                    <p>End: {moment(this.state.event.end).format("DD-MMM-YYYY hh:mm A")}</p>
                                     <p>Category: {this.state.event.category}</p>
                                     {/* <p>Due Date Class: {this.state.event.dueDateClass}</p>
                                     <p>CalendarId: {this.state.event.calendarId}</p> */}

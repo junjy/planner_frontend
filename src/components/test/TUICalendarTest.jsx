@@ -6,6 +6,7 @@ import 'tui-calendar/dist/tui-calendar.css';
 // If you use the default popups, use this.
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
+import plannerAPI from '../../services/api'
 console.log("CALENDAR TEST LOADING")
 
 
@@ -19,8 +20,9 @@ class TUICalendarTest extends React.Component {
         super(props);
         // this.calendarRef = React.createRef();
         this.state = {
+            // list: [],
             dateRange: '',
-            view: 'week',
+            view: 'month',
             viewModeOptions: [
               {
                 title: 'Monthly',
@@ -34,10 +36,76 @@ class TUICalendarTest extends React.Component {
                 title: 'Daily',
                 value: 'day'
               }
-            ]    
+            ],  
         }
     }
 
+    componentDidMount() {
+
+        plannerAPI.listEvents().then((response) => {
+            // console.log(response.data.events);
+
+            this.setState({
+                // list: response.data.events,
+                list: [
+                        {
+                            // id: '1',
+                            // calendarId: '0',
+                            title: 'TOAST UI Calendar Study',
+                            category: 'time',
+                            // dueDateClass: '',
+                            start: '2021-02-02T12:53:55.361+00:00',
+                            end: '2021-02-02T13:53:55.361+00:00'
+                        },
+                        {
+                            // id: '2',
+                            // calendarId: '0',
+                            title: 'Practice',
+                            category: 'time',
+                            // dueDateClass: '',
+                            start: '2021-02-03T15:03:01.542+00:00',
+                            end: '2021-02-03T17:03:01.542+00:00',
+                        },
+                        {
+                            // id: '3',
+                            // calendarId: '0',
+                            title: 'FE Workshop',
+                            category: 'allday',
+                            // dueDateClass: '',
+                            start: '2021-02-03T09:03:01.542+00:00',
+                            end: '2021-02-03T11:03:01.542+00:00',
+                            // isReadOnly: true
+                        },
+                        {
+                            // id: '4',
+                            // calendarId: '0',
+                            title: 'Report',
+                            category: 'time',
+                            // dueDateClass: '',
+                            start: '2021-02-04T15:03:01.542+00:00',
+                            end: '2021-02-04T15:03:01.542+00:00'
+                        },
+                        {
+                            // id: '5',
+                            // calendarId: '1',
+                            title: 'Dept Meeting',
+                            category: 'work',
+                            // dueDateClass: '',
+                            start: '2021-02-18T15:00:00.000+00:00',
+                            end: '2021-02-18T15:00:00.000+00:00'
+                        }
+                    ],
+                // text: "calendar component mounted at 3pm"
+            });
+
+            console.log(this.state.list);
+
+            
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
 
 
 // ---------- Instance method ---------- //
@@ -74,40 +142,40 @@ class TUICalendarTest extends React.Component {
         
     }
 
-    // setRenderRangeText() {
-    //     const view = this.calendarInst.getViewName();
-    //     const calDate = this.calendarInst.getDate();
-    //     const rangeStart = this.calendarInst.getDateRangeStart();
-    //     const rangeEnd = this.calendarInst.getDateRangeEnd();
-    //     let year = calDate.getFullYear();
-    //     let month = calDate.getMonth() + 1;
-    //     let date = calDate.getDate();
-    //     let dateRangeText = '';
-    //     let endMonth, endDate, start, end;
+    setRenderRangeText() {
+        const view = this.calendarInst.getViewName();
+        const calDate = this.calendarInst.getDate();
+        const rangeStart = this.calendarInst.getDateRangeStart();
+        const rangeEnd = this.calendarInst.getDateRangeEnd();
+        let year = calDate.getFullYear();
+        let month = calDate.getMonth() + 1;
+        let date = calDate.getDate();
+        let dateRangeText = '';
+        let endMonth, endDate, start, end;
   
-    //     switch (view) {
-    //       case 'month':
-    //         dateRangeText = `${year}-${month}`;
-    //         break;
-    //       case 'week':
-    //         year = rangeStart.getFullYear();
-    //         month = rangeStart.getMonth() + 1;
-    //         date = rangeStart.getDate();
-    //         endMonth = rangeEnd.getMonth() + 1;
-    //         endDate = rangeEnd.getDate();
+        switch (view) {
+          case 'month':
+            dateRangeText = `${year}-${month}`;
+            break;
+          case 'week':
+            year = rangeStart.getFullYear();
+            month = rangeStart.getMonth() + 1;
+            date = rangeStart.getDate();
+            endMonth = rangeEnd.getMonth() + 1;
+            endDate = rangeEnd.getDate();
   
-    //         start = `${year}-${month < 10 ? '0' : ''}${month}-${date < 10 ? '0' : ''}${date}`;
-    //         end = `${year}-${endMonth < 10 ? '0' : ''}${endMonth}-${
-    //           endDate < 10 ? '0' : ''
-    //         }${endDate}`;
-    //         dateRangeText = `${start} ~ ${end}`;
-    //         break;
-    //       default:
-    //         dateRangeText = `${year}-${month}-${date}`;
-    //     }
+            start = `${year}-${month < 10 ? '0' : ''}${month}-${date < 10 ? '0' : ''}${date}`;
+            end = `${year}-${endMonth < 10 ? '0' : ''}${endMonth}-${
+              endDate < 10 ? '0' : ''
+            }${endDate}`;
+            dateRangeText = `${start} ~ ${end}`;
+            break;
+          default:
+            dateRangeText = `${year}-${month}-${date}`;
+        }
 
-    //   this.setState({dateRange: dateRangeText});
-    // }
+      this.setState({dateRange: dateRangeText});
+    }
 
     render() {
         const selectedView = 'month'; // default view
@@ -348,45 +416,46 @@ class TUICalendarTest extends React.Component {
                     borderColor: '#00a9ff'
                     }
                 ]}
-                schedules={[
-                    {
-                    id: '1',
-                    calendarId: '0',
-                    title: 'TOAST UI Calendar Study',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2021-02-02T12:53:55.361+00:00',
-                    end: '2021-02-02T13:53:55.361+00:00'
-                    },
-                    {
-                    id: '2',
-                    calendarId: '0',
-                    title: 'Practice',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2021-02-03T15:03:01.542+00:00',
-                    end: '2021-02-03T17:03:01.542+00:00',
-                    },
-                    {
-                    id: '3',
-                    calendarId: '0',
-                    title: 'FE Workshop',
-                    category: 'allday',
-                    dueDateClass: '',
-                    start: '2021-02-03T09:03:01.542+00:00',
-                    end: '2021-02-03T11:03:01.542+00:00',
-                    isReadOnly: true
-                    },
-                    {
-                    id: '4',
-                    calendarId: '0',
-                    title: 'Report',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2021-02-04T15:03:01.542+00:00',
-                    end: '2021-02-04T15:03:01.542+00:00'
-                    }
-                ]}
+                schedules={this.state.list}
+                // schedules={[
+                //     {
+                //     id: '1',
+                //     calendarId: '0',
+                //     title: 'TOAST UI Calendar Study',
+                //     category: 'time',
+                //     dueDateClass: '',
+                //     start: '2021-02-02T12:53:55.361+00:00',
+                //     end: '2021-02-02T13:53:55.361+00:00'
+                //     },
+                //     {
+                //     id: '2',
+                //     calendarId: '0',
+                //     title: 'Practice',
+                //     category: 'time',
+                //     dueDateClass: '',
+                //     start: '2021-02-03T15:03:01.542+00:00',
+                //     end: '2021-02-03T17:03:01.542+00:00',
+                //     },
+                //     {
+                //     id: '3',
+                //     calendarId: '0',
+                //     title: 'FE Workshop',
+                //     category: 'allday',
+                //     dueDateClass: '',
+                //     start: '2021-02-03T09:03:01.542+00:00',
+                //     end: '2021-02-03T11:03:01.542+00:00',
+                //     isReadOnly: true
+                //     },
+                //     {
+                //     id: '4',
+                //     calendarId: '0',
+                //     title: 'Report',
+                //     category: 'time',
+                //     dueDateClass: '',
+                //     start: '2021-02-04T15:03:01.542+00:00',
+                //     end: '2021-02-04T15:03:01.542+00:00'
+                //     }
+                // ]}
             />
 
         )
@@ -408,8 +477,8 @@ class TUICalendarTest extends React.Component {
                     <span id="renderRange" className="render-range">{this.state.dateRange}</span>
                 </div>
 
-                {/* <button onClick={this.weekChangeButton}>Week</button> */}
-                {MyCalendar()}
+                <button onClick={this.weekChangeButton}>Week</button>
+                {<MyCalendar />}
 
                 <button onClick={this.handleClickNextButton}>Go next!</button>
             </>
