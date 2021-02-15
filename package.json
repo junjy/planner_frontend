@@ -2,6 +2,9 @@
   "name": "planner_frontend",
   "version": "0.1.0",
   "private": true,
+  "engine": {
+    "node": "12.18.3"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@fullcalendar/bootstrap": "^5.5.0",
