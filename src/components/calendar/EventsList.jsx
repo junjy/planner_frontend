@@ -55,16 +55,18 @@ class EventsList extends React.Component {
     }
     componentDidMount() {
 
-        plannerAPI.listEvents().then((response) => {
-            // console.log(response.data.events);
+        // plannerAPI.listEvents().then((response) => {
+        //     // console.log(response.data.events);
 
-            this.setState({
-                list: response.data.events,
-                // text: "calendar component mounted at 3pm"
-            });
-        }).catch(err => {
-            console.log(err)
-        })
+        //     this.setState({
+        //         list: response.data.events,
+        //         // text: "calendar component mounted at 3pm"
+        //     });
+        // }).catch(err => {
+        //     console.log(err)
+        // })
+
+        this.handleEvents();
 
     }
 
@@ -328,8 +330,19 @@ class EventsList extends React.Component {
     // }
     
     handleEvents = (events) => {
-        this.setState({
-          currentEvents: events
+        // this.setState({
+        //   currentEvents: events
+        // })
+
+        plannerAPI.listEvents().then((response) => {
+            // console.log(response.data.events);
+
+            this.setState({
+                list: response.data.events,
+                // text: "calendar component mounted at 3pm"
+            });
+        }).catch(err => {
+            console.log(err)
         })
     }
 
@@ -405,14 +418,6 @@ class EventsList extends React.Component {
                             }
 
                         }}
-                        // customButtons={{
-                        //     addEvent: {
-                        //       text: 'Add Event',
-                        //       click() {
-                        //         setIsModalOpen(true);
-                        //       }
-                        //     }
-                        //   }}
                         /* event triggers */
                         dateClick={this.handleDateClick} // return clicked date to var "dateClickedInfo"
                         select={this.handleDateSelect} // return selected date range to "selectionInfo"
@@ -428,9 +433,9 @@ class EventsList extends React.Component {
                         eventChange={function(){}}
                         eventRemove={function(){}} */
                         /***  Update in mongoDB ***/
-                        eventAdd={this.addCalEvent}
-                        eventChange={this.updateCalEvent}
-                        eventRemove={this.removeCalEvent}
+                        // eventAdd={this.addCalEvent}
+                        // eventChange={this.updateCalEvent}
+                        // eventRemove={this.removeCalEvent}
 
                     />
                     {/* Add Display Event Modal here */}
@@ -459,11 +464,11 @@ class EventsList extends React.Component {
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={this.handleClose}>
-                            Close
-                            </Button>
                             <Button variant="primary" onClick={(e) => {this.addCalEvent(e);}}>
                             Submit
+                            </Button>
+                            <Button variant="secondary" onClick={this.handleClose}>
+                            Close
                             </Button>
                         </Modal.Footer>
                         </Modal>
@@ -500,14 +505,14 @@ class EventsList extends React.Component {
                             <p>End: {this.state.displayEvent.end}</p> */}
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={this.handleClose2}>
-                            Close
+                            <Button variant="danger" onClick={this.removeCalEvent}>
+                            Delete Event
                             </Button>
                             <Button variant="primary" onClick={(e) => {this.updateCalEvent(e);}}>
                             Edit Event
                             </Button>
-                            <Button variant="danger" onClick={this.removeCalEvent}>
-                            Delete Event
+                            <Button variant="secondary" onClick={this.handleClose2}>
+                            Close
                             </Button>
                         </Modal.Footer>
                         </Modal>
