@@ -8,6 +8,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import momentPlugin from '@fullcalendar/moment'; // req for Date formatting strings
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Modal, Form} from "react-bootstrap";
+import moment from 'moment'
+import Datetime from 'react-datetime'
+import "react-datetime/css/react-datetime.css";
 // import '../../css/fullcalendar.css'
 // import '../../css/modal.css'
 
@@ -34,6 +37,13 @@ class EventsList extends React.Component {
             show: false,
             show2: false,
             displayEvent: {
+                id: '',
+                title: '',
+                category: '',
+                start: '',
+                end: '',
+            },
+            addEvent: {
                 title: '',
                 category: '',
                 start: '',
@@ -63,20 +73,86 @@ class EventsList extends React.Component {
 
     //=== GENERAL HANDLERS - BACKEND DB ====
 
-    addCalEvent = (addInfo) => {
-        console.log(addInfo);
+    addCalEvent = (e) => {
+        e.preventDefault();
+
+        console.log(e);
+
+        const formData = this.state.addEvent;
+        console.log(formData);
+
+        // validate form
+        // const formValid = this.validateFormInputs()
+        const formValid = true;
+
+        if (formValid) {
+            // send form submission to backend via API
+            plannerAPI.createEvent(formData)
+                .then(response => {
+                    if (!response.data) {
+                        console.log("error in form");
+                    }
+                    console.log(response.data);
+                    console.log("new event created");
+                    // clear form input
+                    this.setState({
+                        addEvent: {
+                            title: '',
+                            category: '',
+                            start: '',
+                            end: '',
+                        },
+                    })
+                    // console.log(response.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
 
     }
 
 
-    updateCalEvent = (changeInfo) => {
-        console.log(changeInfo);
+    updateCalEvent = (e) => {
+        e.preventDefault();
+
+        let id = this.state.displayEvent.id;
+        console.log(id);
+
+        const formData = this.state.displayEvent;
+        console.log('frontend formData:')
+        console.log(formData);
+    
+        // const formValid = this.validateFormInputs();
+        // add form validation later
+        const formValid = true;
+    
+        if (formValid) {
+          plannerAPI
+            .updateEvent(id, formData)
+            .then((response) => {
+              if (!response.data) {
+                console.log("error in form");
+                return;
+              }
+              console.log(response);
+              console.log("existing event edited");
+            //   this.setState({
+            //     showFormMsg: true,
+            //   });
+            //   this.scrollToTop();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+
 
     }
 
-    removeCalEvent = (removeInfo) => {
-        console.log(removeInfo.event.extendedProps);
-        let id = removeInfo.event.extendedProps._id;
+    removeCalEvent = () => {
+
+        let id = this.state.displayEvent.id;
         console.log(id);
 
         // to update
@@ -94,6 +170,35 @@ class EventsList extends React.Component {
           console.log(err);
         });
 
+    }
+
+    convertDateTime(input) {
+        let temp = moment(input).toISOString();
+        // console.log(temp);
+        return temp;
+    }
+
+
+    // to combine with end date later
+    handleStartInputChange(e) {
+        console.log(e);
+        this.setState({
+            event: {...this.state.displayEvent, start: this.convertDateTime(e)} //... copies current state of events
+        })
+    }
+
+    handleEndInputChange(e) {
+        console.log(e);
+        this.setState({
+            event: {...this.state.displayEvent, end: this.convertDateTime(e)} 
+        })
+    }
+
+
+    handleInputChange(e) {
+        const { event } = this.state; //destructure
+        event[e.target.name] = e.target.value;
+        this.setState({ event });
     }
 
 
@@ -125,7 +230,8 @@ class EventsList extends React.Component {
     }
 
     // For modal2
-    handleShow2 = (clickinfo) => {
+    handleShow2 = () => {
+        console.log();
         this.setState({
             show2: true,
         })
@@ -136,10 +242,24 @@ class EventsList extends React.Component {
             show2: false,
         })
     }
-    
+
     handleChange = (e) => {
-        this.setState({title: e.target.value})
+
+        const { addEvent } = this.state; //destructure
+        addEvent[e.target.name] = e.target.value;
+        this.setState({ addEvent });
     }
+    
+    handleChange2 = (e) => {
+        // this.setState({
+        //     title: e.target.value
+        // })
+
+        const { displayEvent } = this.state; //destructure
+        displayEvent[e.target.name] = e.target.value;
+        this.setState({ displayEvent });
+    }
+    
     // For dateClick:
     handleDateClick = (arg) => { // bind with an arrow function
         // alert(arg.dateStr);
@@ -151,21 +271,22 @@ class EventsList extends React.Component {
     handleDateSelect = (selectInfo) => {
         console.log(selectInfo);
 
+        this.handleShow();
 
-        let title = prompt('Please enter a new title for your event')
-        let calendarApi = selectInfo.view.calendar
+        // let title = prompt('Please enter a new title for your event')
+        // let calendarApi = selectInfo.view.calendar
     
-        calendarApi.unselect() // clear date selection
+        // calendarApi.unselect() // clear date selection
     
-        if (title) {
-            calendarApi.addEvent({
-                // id: createEventId(),
-                title,
-                start: selectInfo.startStr,
-                end: selectInfo.endStr,
-                allDay: selectInfo.allDay
-            })
-        }
+        // if (title) {
+        //     calendarApi.addEvent({
+        //         // id: createEventId(),
+        //         title,
+        //         start: selectInfo.startStr,
+        //         end: selectInfo.endStr,
+        //         allDay: selectInfo.allDay
+        //     })
+        // }
     }
     
     handleEventClick = (clickInfo) => {
@@ -173,11 +294,12 @@ class EventsList extends React.Component {
 
         const id = clickInfo.event.extendedProps._id;
 
-        const filterEvent = this.state.list.find(event => event._id == id)
+        const filterEvent = this.state.list.find(event => event._id === id)
         console.log(filterEvent);
 
         this.setState ({
             displayEvent: {
+                id: id,
                 title: filterEvent.title,
                 category: filterEvent.category,
                 start: filterEvent.start,
@@ -186,6 +308,8 @@ class EventsList extends React.Component {
         })
 
         this.handleShow2();
+
+        // clear form input
 
 
         // if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -322,18 +446,24 @@ class EventsList extends React.Component {
                         <Modal.Body>
                             <Form.Group >
                                 <Form.Label>Title: </Form.Label>
-                                <Form.Control type="text" onChange={this.handleChange} value={this.state.name} placeholder="name input"/>
+                                <Form.Control type="text" className="" id="title" name="title" onChange={this.handleChange} value={this.state.addEvent.title} placeholder="name input"/>
 
                                 <Form.Label>Category: </Form.Label>
-                                <Form.Control type="text" onChange={this.handleChange} value={this.state.category} placeholder="category input"/>      
+                                <Form.Control type="text" className="" id="category" name="category" onChange={this.handleChange} value={this.state.addEvent.category} placeholder="category input"/>   
+
+                                <Form.Label>Start: </Form.Label>
+                                <Form.Control type="text" className="" id="start" name="start" onChange={this.handleChange} value={this.state.addEvent.start} placeholder="start input"/>    
+
+                                <Form.Label>End: </Form.Label>
+                                <Form.Control type="text" className="" id="end" name="end" onChange={this.handleChange} value={this.state.addEvent.end} placeholder="end input"/>    
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={this.handleClose}>
                             Close
                             </Button>
-                            <Button variant="primary" onClick={this.handleClose}>
-                            Save Changes
+                            <Button variant="primary" onClick={(e) => {this.addCalEvent(e);}}>
+                            Submit
                             </Button>
                         </Modal.Footer>
                         </Modal>
@@ -350,17 +480,34 @@ class EventsList extends React.Component {
                             <Modal.Title>Display Event Details</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <p>Title: {this.state.displayEvent.title}</p>
+
+                        <Form.Group >
+                            <Form.Label>Title: </Form.Label>
+                            <Form.Control type="text" className="" id="title" name="title"  onChange={this.handleChange2} value={this.state.displayEvent.title} placeholder="name input"/>
+
+                            <Form.Label>Category: </Form.Label>
+                            <Form.Control type="text" className="" id="category" name="category" onChange={this.handleChange2} value={this.state.displayEvent.category} placeholder="category input"/>   
+
+                            <Form.Label>Start: </Form.Label>
+                            <Form.Control type="text" className="" id="start" name="start" onChange={this.handleChange2} value={this.state.displayEvent.start} placeholder="start input"/>    
+
+                            <Form.Label>End: </Form.Label>
+                            <Form.Control type="text" className="" id="end" name="end" onChange={this.handleChange2} value={this.state.displayEvent.end} placeholder="end input"/>    
+                        </Form.Group>
+                            {/* <p>Title: {this.state.displayEvent.title}</p>
                             <p>Category: {this.state.displayEvent.category}</p>
                             <p>Start: {this.state.displayEvent.start}</p> 
-                            <p>End: {this.state.displayEvent.end}</p>
+                            <p>End: {this.state.displayEvent.end}</p> */}
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={this.handleClose2}>
                             Close
                             </Button>
-                            <Button variant="primary" onClick={this.handleClose2}>
-                            Save Changes
+                            <Button variant="primary" onClick={(e) => {this.updateCalEvent(e);}}>
+                            Edit Event
+                            </Button>
+                            <Button variant="danger" onClick={this.removeCalEvent}>
+                            Delete Event
                             </Button>
                         </Modal.Footer>
                         </Modal>
